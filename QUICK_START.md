@@ -224,3 +224,23 @@ cd ../client && bun install
 5. **Console Logs**: Server logs show database queries, client logs show API calls
 
 Good luck! 🚀
+
+### Docker Compose
+```bash
+docker compose up --build
+```
+
+Application URLs:
+- Frontend: http://localhost:3000
+- API: http://localhost:4001/api
+
+Notes:
+- The server container runs database migrations automatically on startup.
+- On the first run, the SQLite database is also seeded with sample users, markets, and bets.
+- The SQLite file is stored in the named Docker volume `server_data`, so data persists across restarts.
+
+To reset the Dockerized database and reseed from scratch:
+```bash
+docker compose down -v
+docker compose up --build
+```

@@ -4,7 +4,8 @@ import { authRoutes } from "./src/api/auth.routes";
 import { marketRoutes } from "./src/api/markets.routes";
 import { jwtPlugin } from "./src/plugins/jwt";
 
-const PORT = process.env.PORT || 4001;
+const PORT = Number(process.env.PORT || 4001);
+const HOST = process.env.HOST || "0.0.0.0";
 
 export const app = new Elysia()
   .use(
@@ -28,6 +29,9 @@ export const app = new Elysia()
   .use(marketRoutes);
 
 if (import.meta.main) {
-  app.listen(PORT);
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  app.listen({
+    port: PORT,
+    hostname: HOST,
+  });
+  console.log(`🚀 Server running at http://${HOST}:${PORT}`);
 }
