@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "@tanstack/react-router";
+import { useAuth } from '@/lib/auth-context'
 
 interface MarketCardProps {
   market: Market;
@@ -10,14 +11,23 @@ interface MarketCardProps {
 
 export function MarketCard({ market }: MarketCardProps) {
   const navigate = useNavigate();
-
+  const { isAdmin } = useAuth()
+  const date = new Date(market.createdAt);
+  
   return (
     <Card>
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="flex-1">
+            { isAdmin && (
+            <Button onClick={() => navigate({ to: `/auth/resolveBet/${market.id}` })}>Resolve bet</Button>)
+            }
             <CardTitle className="text-xl">{market.title}</CardTitle>
             <CardDescription>By: {market.creator || "Unknown"}</CardDescription>
+            <p className="text-xs text-muted-foreground">
+              Created: {date.toLocaleDateString("en-GB")} {date.toLocaleTimeString()}
+            </p>
+            <p>{market.totalParticipants} participants</p>
           </div>
           <Badge variant={market.status === "active" ? "default" : "secondary"}>
             {market.status === "active" ? "Active" : "Resolved"}

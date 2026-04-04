@@ -14,13 +14,39 @@ function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<"active" | "resolved">("active");
+  // ADDED TIME
+  const [time, setTime] = useState(new Date());
+  const [sortBy, setSortBy] = useState<string>("createdAt_desc");
+  const [page, setPage] = useState(0);
+  const [limit] = useState(20);
+  const [totalMarkets, setTotalMarkets] = useState(0);
+  const sortedMarkets = [...markets].sort((a, b) => {
+  switch (sortBy) {
+    case "createdAt_desc":
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    case "createdAt_asc":
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    case "totalMarketBets_desc":
+      return b.totalMarketBets - a.totalMarketBets;
+    case "totalMarketBets_asc":
+      return a.totalMarketBets - b.totalMarketBets;
+    case "totalParticipants_desc":
+      return b.totalParticipants - a.totalParticipants;
+    case "totalParticipants_asc":
+      return a.totalParticipants - b.totalParticipants;
+    default:
+      return 0;
+  }});
+  const totalPages = Math.ceil(sortedMarkets.length / limit);
+  const paginatedMarkets = sortedMarkets.slice(page * limit, (page + 1) * limit);
 
   const loadMarkets = async () => {
     try {
       setIsLoading(true);
       setError(null);
-      const data = await api.listMarkets(status);
-      setMarkets(data);
+      const data = await api.listMarkets(status, 0, 100);
+      setMarkets(data.data);
+      setTotalMarkets(data.total);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load markets");
     } finally {
@@ -29,8 +55,37 @@ function DashboardPage() {
   };
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
     loadMarkets();
-  }, [status]);
+  }, [status, page]);
+
+  // Added SSE for live updates
+  useEffect(() => {
+    const es = new EventSource(`http://localhost:4001/api/markets/sse?status=${status}&page=${page}&limit=${limit}`);
+
+    es.addEventListener("marketsUpdate", (event) => {
+      const res = JSON.parse(event.data);
+      setMarkets(prev => {
+        // Merge updates into full list
+        const updated = [...prev];
+        res.data.forEach(newMarket => {
+          const idx = updated.findIndex(m => m.id === newMarket.id);
+          if (idx >= 0) updated[idx] = newMarket;
+          else updated.push(newMarket);
+        });
+        return updated;
+      });});
+
+    es.onerror = () => es.close();
+    return () => es.close();
+  }, [status, page]);
 
   if (!isAuthenticated) {
     return (
@@ -57,7 +112,19 @@ function DashboardPage() {
           <div>
             <h1 className="text-4xl font-bold text-gray-900">Markets</h1>
             <p className="text-gray-600 mt-2">Welcome back, {user?.username}!</p>
+            {/* Added TIME */}
+            <p className="text-sm text-black-500 mt-1">
+              {time.toLocaleDateString("en-GB")} -- {time.toLocaleTimeString()}
+            </p>
           </div>
+              <div>
+                <Button onClick={() => navigate({ to: "/auth/profile" })}>Profile</Button>
+              </div>
+
+              <div>
+                <Button onClick={() => navigate({ to: "/auth/rankings" })}>Rankings</Button>
+              </div>
+
           <div className="flex items-center gap-4">
             <Button variant="outline" onClick={() => navigate({ to: "/auth/logout" })}>
               Logout
@@ -92,6 +159,47 @@ function DashboardPage() {
           </div>
         )}
 
+        {/* Pagination */}
+        <div className="flex items-center space-x-2 mt-4">
+          <button
+            onClick={() => setPage(prev => Math.max(prev - 1, 0))}
+            disabled={page === 0}
+            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+          >
+            Prev
+          </button>
+
+          <span className="px-2 text-sm">
+            Page {page + 1} of {totalPages}
+          </span>
+
+          <button
+            onClick={() => setPage(prev => Math.min(prev + 1, totalPages - 1))}
+            disabled={page >= totalPages - 1}
+            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+
+        {/* Sort by ... */}
+        <div className="mb-6 flex gap-4 items-center">
+          <label htmlFor="sort" className="mr-2 text-sm font-medium">Sort by:</label>
+          <select
+            id="sort"
+            className="border rounded px-2 py-1"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="createdAt_desc">Date created (newest)</option>
+            <option value="createdAt_asc">Date created (oldest)</option>
+            <option value="totalMarketBets_desc">Total bet (high → low)</option>
+            <option value="totalMarketBets_asc">Total bet (low → high)</option>
+            <option value="totalParticipants_desc">Participants (high → low)</option>
+            <option value="totalParticipants_asc">Participants (low → high)</option>
+          </select>
+        </div>
+
         {/* Markets Grid */}
         {isLoading ? (
           <Card>
@@ -111,7 +219,7 @@ function DashboardPage() {
           </Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {markets.map((market) => (
+            {paginatedMarkets.map((market) => (
               <MarketCard key={market.id} market={market} />
             ))}
           </div>

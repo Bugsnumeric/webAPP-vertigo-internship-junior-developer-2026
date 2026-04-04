@@ -18,6 +18,10 @@ export const usersTable = sqliteTable(
     username: text("username").notNull().unique(),
     email: text("email").notNull().unique(),
     passwordHash: text("password_hash").notNull(),
+    role: text("role", { enum: ["user", "admin"] })
+      .notNull()
+      .default("user"),
+    balance: real("balance").default(1000).notNull(),
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()
       .$defaultFn(() => new Date()),
@@ -89,6 +93,7 @@ export const betsTable = sqliteTable(
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()
       .$defaultFn(() => new Date()),
+    status: text("status").default("pending").notNull(),
   },
   (table) => ({
     userIdIdx: index("bets_user_id_idx").on(table.userId),

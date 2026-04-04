@@ -9,6 +9,8 @@ export interface Market {
   creator?: string;
   outcomes: MarketOutcome[];
   totalMarketBets: number;
+  totalParticipants: number;
+  createdAt: string;
 }
 
 export interface MarketOutcome {
@@ -22,7 +24,9 @@ export interface User {
   id: number;
   username: string;
   email: string;
+  role?: "user" | "admin";
   token: string;
+  balance?: number;
 }
 
 export interface Bet {
@@ -32,6 +36,30 @@ export interface Bet {
   outcomeId: number;
   amount: number;
   createdAt: string;
+}
+
+export interface Bettor {
+  userId: number;
+  username: string;
+  amount: number;
+}
+
+export interface OutcomeWithBets extends MarketOutcome {
+  position: number;
+  bettors: Bettor[];
+  totalAmount: number;
+}
+
+export interface MarketDetails extends Market {
+  outcomes: OutcomeWithBets[];
+  totalParticipants: number;
+  totalVolume: number;
+}
+
+export interface ResolveMarketResponse {
+  success: boolean;
+  bet?: any;
+  warning?: string;
 }
 
 // API Client
@@ -90,10 +118,15 @@ class ApiClient {
     });
   }
 
-  // Markets endpoints
-  async listMarkets(status: "active" | "resolved" = "active"): Promise<Market[]> {
-    return this.request(`/api/markets?status=${status}`);
-  }
+  // Markets endpoints +
+  async listMarkets(
+  status: "active" | "resolved" = "active",
+  offset = 0,
+  limit = 20,
+): Promise<{ data: Market[]; offset: number; limit: number; total: number }> {
+  return this.request(`/api/markets?status=${status}&offset=${offset}&limit=${limit}`);
+}
+
 
   async getMarket(id: number): Promise<Market> {
     return this.request(`/api/markets/${id}`);
@@ -112,6 +145,39 @@ class ApiClient {
       method: "POST",
       body: JSON.stringify({ outcomeId, amount }),
     });
+  }
+
+  // User endpoints
+  async getProfile() {
+    return this.request("/api/markets/me");
+  }
+
+  async getActiveBets() {
+    return this.request("/api/markets/me/active-bets");
+  }
+
+  async getResolvedBets() {
+    return this.request("/api/markets/me/resolved-bets");
+  }
+
+  async getMarketDetails(marketId: number): Promise<MarketDetails>  {
+    return this.request(`/api/markets/details/${marketId}`);
+  }
+
+  async resolveMarket(marketId: number, winningOutcomeId: number): Promise<{
+    success: boolean;
+    marketId: number;
+    winningOutcomeId: number;
+    totalBetsResolved: number;
+  }> {
+    return this.request(`/api/markets/${marketId}/resolve-market`, {
+      method: "POST",
+      body: JSON.stringify({ winningOutcomeId }),
+    });
+  }
+
+  async getRanking(): Promise<any[]> {
+    return this.request('/api/markets/rankings');
   }
 }
 

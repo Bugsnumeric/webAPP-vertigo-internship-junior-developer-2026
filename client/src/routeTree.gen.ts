@@ -8,164 +8,275 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from "./routes/__root";
-import { Route as IndexRouteImport } from "./routes/index";
-import { Route as MarketsNewRouteImport } from "./routes/markets/new";
-import { Route as MarketsIdRouteImport } from "./routes/markets/$id";
-import { Route as AuthRegisterRouteImport } from "./routes/auth/register";
-import { Route as AuthLogoutRouteImport } from "./routes/auth/logout";
-import { Route as AuthLoginRouteImport } from "./routes/auth/login";
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as MarketsNewRouteImport } from './routes/markets/new'
+import { Route as MarketsIdRouteImport } from './routes/markets/$id'
+import { Route as AuthResolved_betsRouteImport } from './routes/auth/resolved_bets'
+import { Route as AuthRegisterRouteImport } from './routes/auth/register'
+import { Route as AuthRankingsRouteImport } from './routes/auth/rankings'
+import { Route as AuthProfileRouteImport } from './routes/auth/profile'
+import { Route as AuthLogoutRouteImport } from './routes/auth/logout'
+import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as AuthActive_betsRouteImport } from './routes/auth/active_bets'
+import { Route as AuthResolveBetMarketIdRouteImport } from './routes/auth/resolveBet.$marketId'
 
 const IndexRoute = IndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const MarketsNewRoute = MarketsNewRouteImport.update({
-  id: "/markets/new",
-  path: "/markets/new",
+  id: '/markets/new',
+  path: '/markets/new',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const MarketsIdRoute = MarketsIdRouteImport.update({
-  id: "/markets/$id",
-  path: "/markets/$id",
+  id: '/markets/$id',
+  path: '/markets/$id',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
+const AuthResolved_betsRoute = AuthResolved_betsRouteImport.update({
+  id: '/auth/resolved_bets',
+  path: '/auth/resolved_bets',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
-  id: "/auth/register",
-  path: "/auth/register",
+  id: '/auth/register',
+  path: '/auth/register',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
+const AuthRankingsRoute = AuthRankingsRouteImport.update({
+  id: '/auth/rankings',
+  path: '/auth/rankings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthProfileRoute = AuthProfileRouteImport.update({
+  id: '/auth/profile',
+  path: '/auth/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthLogoutRoute = AuthLogoutRouteImport.update({
-  id: "/auth/logout",
-  path: "/auth/logout",
+  id: '/auth/logout',
+  path: '/auth/logout',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
-  id: "/auth/login",
-  path: "/auth/login",
+  id: '/auth/login',
+  path: '/auth/login',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
+const AuthActive_betsRoute = AuthActive_betsRouteImport.update({
+  id: '/auth/active_bets',
+  path: '/auth/active_bets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthResolveBetMarketIdRoute = AuthResolveBetMarketIdRouteImport.update({
+  id: '/auth/resolveBet/$marketId',
+  path: '/auth/resolveBet/$marketId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute;
-  "/auth/login": typeof AuthLoginRoute;
-  "/auth/logout": typeof AuthLogoutRoute;
-  "/auth/register": typeof AuthRegisterRoute;
-  "/markets/$id": typeof MarketsIdRoute;
-  "/markets/new": typeof MarketsNewRoute;
+  '/': typeof IndexRoute
+  '/auth/active_bets': typeof AuthActive_betsRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/logout': typeof AuthLogoutRoute
+  '/auth/profile': typeof AuthProfileRoute
+  '/auth/rankings': typeof AuthRankingsRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/auth/resolved_bets': typeof AuthResolved_betsRoute
+  '/markets/$id': typeof MarketsIdRoute
+  '/markets/new': typeof MarketsNewRoute
+  '/auth/resolveBet/$marketId': typeof AuthResolveBetMarketIdRoute
 }
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute;
-  "/auth/login": typeof AuthLoginRoute;
-  "/auth/logout": typeof AuthLogoutRoute;
-  "/auth/register": typeof AuthRegisterRoute;
-  "/markets/$id": typeof MarketsIdRoute;
-  "/markets/new": typeof MarketsNewRoute;
+  '/': typeof IndexRoute
+  '/auth/active_bets': typeof AuthActive_betsRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/logout': typeof AuthLogoutRoute
+  '/auth/profile': typeof AuthProfileRoute
+  '/auth/rankings': typeof AuthRankingsRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/auth/resolved_bets': typeof AuthResolved_betsRoute
+  '/markets/$id': typeof MarketsIdRoute
+  '/markets/new': typeof MarketsNewRoute
+  '/auth/resolveBet/$marketId': typeof AuthResolveBetMarketIdRoute
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport;
-  "/": typeof IndexRoute;
-  "/auth/login": typeof AuthLoginRoute;
-  "/auth/logout": typeof AuthLogoutRoute;
-  "/auth/register": typeof AuthRegisterRoute;
-  "/markets/$id": typeof MarketsIdRoute;
-  "/markets/new": typeof MarketsNewRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/auth/active_bets': typeof AuthActive_betsRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/logout': typeof AuthLogoutRoute
+  '/auth/profile': typeof AuthProfileRoute
+  '/auth/rankings': typeof AuthRankingsRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/auth/resolved_bets': typeof AuthResolved_betsRoute
+  '/markets/$id': typeof MarketsIdRoute
+  '/markets/new': typeof MarketsNewRoute
+  '/auth/resolveBet/$marketId': typeof AuthResolveBetMarketIdRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
+  fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | "/"
-    | "/auth/login"
-    | "/auth/logout"
-    | "/auth/register"
-    | "/markets/$id"
-    | "/markets/new";
-  fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/auth/login" | "/auth/logout" | "/auth/register" | "/markets/$id" | "/markets/new";
+    | '/'
+    | '/auth/active_bets'
+    | '/auth/login'
+    | '/auth/logout'
+    | '/auth/profile'
+    | '/auth/rankings'
+    | '/auth/register'
+    | '/auth/resolved_bets'
+    | '/markets/$id'
+    | '/markets/new'
+    | '/auth/resolveBet/$marketId'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/auth/active_bets'
+    | '/auth/login'
+    | '/auth/logout'
+    | '/auth/profile'
+    | '/auth/rankings'
+    | '/auth/register'
+    | '/auth/resolved_bets'
+    | '/markets/$id'
+    | '/markets/new'
+    | '/auth/resolveBet/$marketId'
   id:
-    | "__root__"
-    | "/"
-    | "/auth/login"
-    | "/auth/logout"
-    | "/auth/register"
-    | "/markets/$id"
-    | "/markets/new";
-  fileRoutesById: FileRoutesById;
+    | '__root__'
+    | '/'
+    | '/auth/active_bets'
+    | '/auth/login'
+    | '/auth/logout'
+    | '/auth/profile'
+    | '/auth/rankings'
+    | '/auth/register'
+    | '/auth/resolved_bets'
+    | '/markets/$id'
+    | '/markets/new'
+    | '/auth/resolveBet/$marketId'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  AuthLoginRoute: typeof AuthLoginRoute;
-  AuthLogoutRoute: typeof AuthLogoutRoute;
-  AuthRegisterRoute: typeof AuthRegisterRoute;
-  MarketsIdRoute: typeof MarketsIdRoute;
-  MarketsNewRoute: typeof MarketsNewRoute;
+  IndexRoute: typeof IndexRoute
+  AuthActive_betsRoute: typeof AuthActive_betsRoute
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthLogoutRoute: typeof AuthLogoutRoute
+  AuthProfileRoute: typeof AuthProfileRoute
+  AuthRankingsRoute: typeof AuthRankingsRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
+  AuthResolved_betsRoute: typeof AuthResolved_betsRoute
+  MarketsIdRoute: typeof MarketsIdRoute
+  MarketsNewRoute: typeof MarketsNewRoute
+  AuthResolveBetMarketIdRoute: typeof AuthResolveBetMarketIdRoute
 }
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/markets/new": {
-      id: "/markets/new";
-      path: "/markets/new";
-      fullPath: "/markets/new";
-      preLoaderRoute: typeof MarketsNewRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/markets/$id": {
-      id: "/markets/$id";
-      path: "/markets/$id";
-      fullPath: "/markets/$id";
-      preLoaderRoute: typeof MarketsIdRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/auth/register": {
-      id: "/auth/register";
-      path: "/auth/register";
-      fullPath: "/auth/register";
-      preLoaderRoute: typeof AuthRegisterRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/auth/logout": {
-      id: "/auth/logout";
-      path: "/auth/logout";
-      fullPath: "/auth/logout";
-      preLoaderRoute: typeof AuthLogoutRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/auth/login": {
-      id: "/auth/login";
-      path: "/auth/login";
-      fullPath: "/auth/login";
-      preLoaderRoute: typeof AuthLoginRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/markets/new': {
+      id: '/markets/new'
+      path: '/markets/new'
+      fullPath: '/markets/new'
+      preLoaderRoute: typeof MarketsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/markets/$id': {
+      id: '/markets/$id'
+      path: '/markets/$id'
+      fullPath: '/markets/$id'
+      preLoaderRoute: typeof MarketsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/resolved_bets': {
+      id: '/auth/resolved_bets'
+      path: '/auth/resolved_bets'
+      fullPath: '/auth/resolved_bets'
+      preLoaderRoute: typeof AuthResolved_betsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/register': {
+      id: '/auth/register'
+      path: '/auth/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/rankings': {
+      id: '/auth/rankings'
+      path: '/auth/rankings'
+      fullPath: '/auth/rankings'
+      preLoaderRoute: typeof AuthRankingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/profile': {
+      id: '/auth/profile'
+      path: '/auth/profile'
+      fullPath: '/auth/profile'
+      preLoaderRoute: typeof AuthProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/logout': {
+      id: '/auth/logout'
+      path: '/auth/logout'
+      fullPath: '/auth/logout'
+      preLoaderRoute: typeof AuthLogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/active_bets': {
+      id: '/auth/active_bets'
+      path: '/auth/active_bets'
+      fullPath: '/auth/active_bets'
+      preLoaderRoute: typeof AuthActive_betsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/resolveBet/$marketId': {
+      id: '/auth/resolveBet/$marketId'
+      path: '/auth/resolveBet/$marketId'
+      fullPath: '/auth/resolveBet/$marketId'
+      preLoaderRoute: typeof AuthResolveBetMarketIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthActive_betsRoute: AuthActive_betsRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthLogoutRoute: AuthLogoutRoute,
+  AuthProfileRoute: AuthProfileRoute,
+  AuthRankingsRoute: AuthRankingsRoute,
   AuthRegisterRoute: AuthRegisterRoute,
+  AuthResolved_betsRoute: AuthResolved_betsRoute,
   MarketsIdRoute: MarketsIdRoute,
   MarketsNewRoute: MarketsNewRoute,
-};
+  AuthResolveBetMarketIdRoute: AuthResolveBetMarketIdRoute,
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
 
-import type { getRouter } from "./router.tsx";
-import type { createStart } from "@tanstack/react-start";
-declare module "@tanstack/react-start" {
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
   interface Register {
-    ssr: true;
-    router: Awaited<ReturnType<typeof getRouter>>;
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
   }
 }

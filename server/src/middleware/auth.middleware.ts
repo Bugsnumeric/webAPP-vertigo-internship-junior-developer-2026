@@ -2,7 +2,7 @@ import { Elysia } from "elysia";
 import { getUserById } from "../lib/auth";
 
 export const authMiddleware = new Elysia({ name: "auth-middleware" })
-  .derive(async ({ headers, jwt }) => {
+  .derive(async ({ headers, jwt, set }) => {
     const authHeader = headers["authorization"];
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return { user: null };
@@ -15,6 +15,11 @@ export const authMiddleware = new Elysia({ name: "auth-middleware" })
     }
 
     const user = await getUserById(payload.userId);
-    return { user };
+    return { user: {
+      id: user?.id,
+      username: user?.username,
+      email: user?.email,
+      role: user?.role
+    } };
   })
   .as("plugin");
