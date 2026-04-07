@@ -20,6 +20,9 @@ Added SSE (server sent event) for live updates;
 Pagination:
 Handling pagination was tricky, especially keeping data consistent across pages and ensuring smooth navigation.
 
+# UPDATE:
+Admin can't resolve a market he placed bet on.
+
 I tried to implement a new route similar to to: "/auth/login" to better structure and organize the code, but I wasn’t able to make it work. For now, I decided to keep everything inside the /auth folder.
 ## Images or Video Demo
 Private youtube video:
