@@ -40,6 +40,9 @@ function RouteComponent() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [resolvingOutcomeId, setResolvingOutcomeId] = useState<number | null>(null)
+  const [adminHasBets, setAdminHasBets] = useState(false)
+  const [adminBetDetails, setAdminBetDetails] = useState<{ outcomeTitle: string; amount: number } | null>(null)
+
 
   // Redirect non-admins
   useEffect(() => {
@@ -77,6 +80,24 @@ function RouteComponent() {
           totalParticipants,
           outcomes: outcomesWithStats,
         })
+
+        if (user?.id && isAdmin) {
+          const allUserBets = await api.getActiveBets()
+          const adminBetsOnMarket = allUserBets.filter(
+            (bet: any) => bet.marketId === id
+          )
+          
+          if (adminBetsOnMarket.length > 0) {
+            setAdminHasBets(true)
+            const firstBet = adminBetsOnMarket[0]
+            const outcome = data.outcomes.find(o => o.id === firstBet.outcomeId)
+            setAdminBetDetails({
+              outcomeTitle: outcome?.title || 'Unknown',
+              amount: firstBet.amount,
+            })
+          }
+        }
+
       } catch (err: any) {
         console.error('Failed to fetch market details:', err)
         setError(err.message || 'Failed to load market')
@@ -88,7 +109,7 @@ function RouteComponent() {
     if (marketId && isAdmin) {
       fetchDetails()
     }
-  }, [marketId, isAdmin])
+  }, [marketId, isAdmin, user?.id])
 
   const handleResolveMarket = async (winningOutcomeId: number) => {
     const outcome = market?.outcomes.find(o => o.id === winningOutcomeId);
@@ -173,7 +194,18 @@ function RouteComponent() {
       </div>
     )
   }
-
+  
+  if (adminHasBets && isAdmin) {
+    return (
+      <div className="p-8 text-center">
+        <h1 className="text-2xl font-bold text-red-600">Access Denied</h1>
+        <p className="text-muted-foreground mt-2">You can't resolve a market you are part of.</p>
+        <Button className="mt-4" onClick={() => navigate({ to: '/' })}>
+          Go to Markets
+        </Button>
+      </div>
+    )
+  }
   return (
     <div className="p-8 max-w-4xl mx-auto space-y-6">
       {/* Header */}

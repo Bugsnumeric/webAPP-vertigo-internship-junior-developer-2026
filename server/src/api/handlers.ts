@@ -496,15 +496,18 @@ export async function handleGetResolvedBets(userId: number) {
 
 export async function handleResolveMarket({ 
   params, 
-  body, 
+  body,
+  user,
   set 
 }: {
   params: { id: number };  // marketId
   body: { winningOutcomeId: number };
+  user: { id: number; role: string };
   set: { status: number };
 }) {
   const marketId = params.id;
   const { winningOutcomeId } = body;
+  const adminId = user.id;
 
   // Get market
   const [market] = await db
@@ -516,6 +519,24 @@ export async function handleResolveMarket({
   if (!market || market.status === "resolved") {
     set.status = 400;
     return { error: "Market not found or already resolved" };
+  }
+  
+  const adminBetsOnMarket = await db
+    .select({ id: betsTable.id, outcomeId: betsTable.outcomeId, amount: betsTable.amount })
+    .from(betsTable)
+    .where(
+      and(
+        eq(betsTable.marketId, marketId),
+        eq(betsTable.userId, adminId)
+      )
+    );
+
+    if (adminBetsOnMarket.length > 0) {
+    set.status = 403;
+    return { 
+      error: "Conflict of interest: Admin cannot resolve markets they have bet on",
+      adminBetsCount: adminBetsOnMarket.length,
+    };
   }
 
   // Get all bets for this market
